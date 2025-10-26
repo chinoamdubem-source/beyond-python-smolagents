@@ -1,0 +1,48 @@
+MySocialApp/
+├─ index.html
+├─ manifest.json
+├─ icon.png
+├─ service-worker.js
+└─ README.txt
+{
+  "name": "MySocial",
+  "short_name": "MySocial",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1877f2",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+self.addEventListener('install', function(e){
+  e.waitUntil(
+    caches.open('mysocial-cache').then(function(cache){
+      return cache.addAll([
+        '/',
+        '/index.html',
+        '/manifest.json',
+        '/icon.png'
+      ]);
+    })
+  );
+});
+
+self.addEventListener('fetch', function(e){
+  e.respondWith(
+    caches.match(e.request).then(function(response){
+      return response || fetch(e.request);
+    })
+  );
+});AdMob.Banner.show({id: "YOUR_AD_UNIT_ID"});
+
+cordova plugin add cordova-plugin-admob-plus
